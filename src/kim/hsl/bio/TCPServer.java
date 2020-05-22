@@ -7,11 +7,6 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * 服务器端 : 编写服务器端 , 监听 8888 端口 , 阻塞等待客户端连接 , 连接成功后 , 创建线程 , 线程中阻塞等待客户端发送请求数据 ;
- * 客户端 : 编写一个客户端 , 请求服务器的 8888 端口号 , 客户端发送 "Hello World" 字符串给服务器端 ;
- * Telnet 客户端 : 使用 Telnet 客户端向上述服务器端 8888 端口 发送 "Hello World" 字符串请求 ;
- */
 public class TCPServer {
     public static void main(String[] args) {
         try {
