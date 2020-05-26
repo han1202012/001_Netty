@@ -20,7 +20,7 @@ public class FileChannelDemo {
 
             //3 . FileChannel 需要通过 缓冲区 Buffer 才能与数据进行读写交互
             ByteBuffer buffer = ByteBuffer.allocate(32);
-            //将数据放入缓冲区中 , flip 方法作用是将 position 位置设置 0 , 修改缓冲区也会修改数组
+            //将数据放入缓冲区中 , flip 方法作用是将 position 位置设置 0
             buffer.put(hello.getBytes());
             buffer.flip();
 
@@ -36,7 +36,5 @@ public class FileChannelDemo {
                 e.printStackTrace();
             }
         }
-
-
     }
 }
