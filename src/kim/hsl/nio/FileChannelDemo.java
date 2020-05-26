@@ -1,6 +1,5 @@
 package kim.hsl.nio;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -27,13 +26,12 @@ public class FileChannelDemo {
 
             //4 . 将 字节缓冲区 ByteBuffer 中的数据写入到 文件通道 FileChannel 中
             fc.write(buffer);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                fos.close();
+                if(fos != null)
+                    fos.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
