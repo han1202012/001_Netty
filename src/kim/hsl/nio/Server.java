@@ -31,6 +31,7 @@ public class Server {
             //将 serverSocketChannel 通道注册给 选择器 ( Selector ), 这里注册连接事件
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
+            //选择器 ( Selector ) 开始监听
             while (true){
                 //判定事件触发 :
                 //查看是否有事件触发, 如果有就在下面处理, 如果没有 continue 终止循环, 继续下一次循环
@@ -81,7 +82,6 @@ public class Server {
                     keyIterator.remove();
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
