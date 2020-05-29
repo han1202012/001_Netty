@@ -1,4 +1,4 @@
-package kim.hsl.nio.demo;
+package kim.hsl.nio.serverclientdemo;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

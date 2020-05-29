@@ -1,4 +1,4 @@
-package kim.hsl.nio;
+package kim.hsl.nio.channeldemo;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

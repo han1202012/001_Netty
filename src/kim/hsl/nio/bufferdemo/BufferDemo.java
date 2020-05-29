@@ -1,4 +1,4 @@
-package kim.hsl.nio;
+package kim.hsl.nio.bufferdemo;
 
 import java.nio.IntBuffer;
 

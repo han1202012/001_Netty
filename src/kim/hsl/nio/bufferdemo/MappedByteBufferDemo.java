@@ -1,4 +1,4 @@
-package kim.hsl.nio;
+package kim.hsl.nio.bufferdemo;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
