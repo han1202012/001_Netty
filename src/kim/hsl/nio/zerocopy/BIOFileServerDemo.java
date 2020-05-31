@@ -1,34 +1,39 @@
 package kim.hsl.nio.zerocopy;
 
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetSocketAddress;
+import java.io.InputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class BIOFileServerDemo {
     public static void main(String[] args) {
         try {
-            // 客户端与服务器端连接过程忽略, 主要是分析数据拷贝过程
-            Socket socket = new Socket();
-            InetSocketAddress inetSocketAddress =
-                    new InetSocketAddress(Inet4Address.getLocalHost(), 8888);
-            socket.connect(inetSocketAddress);
+            // 1. 创建服务器套接字, 并等待客户端连接
+            ServerSocket serverSocket = new ServerSocket(8888);
+            System.out.println("服务器启动,监听 8888 端口");
+            //阻塞, 等待客户端连接请求 ( 此处是第一个阻塞点 )
+            Socket socket = serverSocket.accept();
+            long startTime = System.currentTimeMillis();
+            System.out.println("客户端连接成功");
 
-            // 分析下面过程中, 数据拷贝次数, 和用户态与内核态的转换次数
+            // 2. 接收客户端传输的数据, 并写出到文件中
+            InputStream inputStream = socket.getInputStream();
+            FileOutputStream fileOutputStream = new FileOutputStream("book2.pdf");
+            byte[] buffer = new byte[4096];
 
-            // 1. 从文件中读取数据
-            FileInputStream fileInputStream = new FileInputStream("file.txt");
-            byte[] buffer = new byte[1024];
+            int readLen;
+            // 读取的字节个数大于等于 0 才写出数据
+            while ( ( readLen = inputStream.read(buffer) ) >= 0 ) {
+                // 写出数据到服务器
+                fileOutputStream.write(buffer, 0, readLen);
+            }
+            System.out.println("文件传输完毕, 用时 : " + (System.currentTimeMillis() - startTime) + " ms");
 
-            // 首先将硬盘中的文件, 进行 DMA 拷贝, 此处对应 read 方法, 将文件数据从硬盘中拷贝到 内核缓冲区  ( 用户态切换成内核态 )
-            // 将内核缓冲区中的数据, 通过 CPU 拷贝 方式, 拷贝到 用户缓冲区  ( 内核态切换成用户态 )
-            int readLen = fileInputStream.read(buffer);
-
-            // 2. 写出数据到服务器
-            // 将用户缓冲区中的数据, 再次通过 CPU 拷贝方式, 拷贝到 Socket 缓冲区 ( 用户态切换成内核态 )
-            // 再次使用 DMA 拷贝, 将 Socket 缓冲区中的数据拷贝到 协议栈 ( Protocol Engine ) 中
-            socket.getOutputStream().write(buffer, 0, readLen);
+            // 3. 关闭流
+            socket.close();
+            inputStream.close();
+            fileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
