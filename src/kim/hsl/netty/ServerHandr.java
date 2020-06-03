@@ -29,7 +29,7 @@ public class ServerHandr extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 查看 ChannelHandlerContext 中封装的内容
-        System.out.println("ChannelHandlerContext ctx = " + ctx);
+        System.out.println("channelRead : ChannelHandlerContext ctx = " + ctx);
 
         // 将客户端上传的数据转为 ByteBuffer
         // 这里注意该类是 Netty 中的 io.netty.buffer.ByteBuf 类

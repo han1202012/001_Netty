@@ -24,13 +24,14 @@ public class ClientHandr extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // 查看 ChannelHandlerContext 中封装的内容
-        System.out.println("ChannelHandlerContext ctx = " + ctx);
+        System.out.println("channelActive : ChannelHandlerContext ctx = " + ctx);
 
         // 数据编码 : 将字符串编码, 存储到 io.netty.buffer.ByteBuf 缓冲区中
         ByteBuf byteBuf = Unpooled.copiedBuffer("Hello Server", CharsetUtil.UTF_8);
 
         // 写出并刷新操作 : 写出数据到通道的缓冲区 ( write ), 并执行刷新操作 ( flush )
         ctx.writeAndFlush(byteBuf);
+        System.out.println("客户端向服务器端发送 Hello Server 成功");
     }
 
     /**
@@ -46,7 +47,7 @@ public class ClientHandr extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 查看 ChannelHandlerContext 中封装的内容
-        System.out.println("ChannelHandlerContext ctx = " + ctx);
+        System.out.println("channelRead : ChannelHandlerContext ctx = " + ctx);
 
         // 将服务器下发的数据转为 ByteBuffer
         // 这里注意该类是 Netty 中的 io.netty.buffer.ByteBuf 类
