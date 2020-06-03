@@ -8,7 +8,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 
 /**
  * Netty 案例服务器端
@@ -20,7 +19,8 @@ public class Server {
         //     NioEventLoop 线程中执行无限循环操作
 
         // BossGroup 线程池 : 负责客户端的连接
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        // 指定线程个数 : 客户端个数很少, 不用很多线程维护, 这里指定线程池中线程个数为 1
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         // WorkerGroup 线程池 : 负责客户端连接的数据读写
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
