@@ -35,11 +35,10 @@ public class Server {
                             @Override
                             protected void initChannel(SocketChannel ch) throws Exception {
                                 // 为 管道 Pipeline 设置处理器 Hanedler
-                                ch.pipeline().addLast(null);
+                                ch.pipeline().addLast(new ServerHandr());
                             }
                         }
                 );
-
 
         ChannelFuture cf = null;
         try {
@@ -49,6 +48,10 @@ public class Server {
             cf.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            // 出现异常后, 优雅的关闭
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
         }
 
     }
