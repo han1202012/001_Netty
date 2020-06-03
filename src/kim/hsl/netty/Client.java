@@ -32,6 +32,8 @@ public class Client {
             // ChannelFuture 类分析 , Netty 异步模型
             // sync 作用是该方法不会再次阻塞
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8888).sync();
+            System.out.println("客户端连接服务器成功 ...");
+
             // 关闭通道, 开始监听
             channelFuture.channel().closeFuture().sync();
 

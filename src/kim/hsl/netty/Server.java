@@ -39,11 +39,13 @@ public class Server {
                             }
                         }
                 );
+        System.out.println("服务器准备完毕 ...");
 
         ChannelFuture cf = null;
         try {
             // 绑定本地端口, 进行同步操作 , 并返回 ChannelFuture
             cf = bootstrap.bind(8888).sync();
+            System.out.println("服务器开始监听 8888 端口 ...");
             // 关闭通道 , 开始监听操作
             cf.channel().closeFuture().sync();
         } catch (InterruptedException e) {

@@ -28,7 +28,6 @@ public class ServerHandr extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        super.channelRead(ctx, msg);
         // 查看 ChannelHandlerContext 中封装的内容
         System.out.println("ChannelHandlerContext ctx = " + ctx);
 
@@ -38,7 +37,7 @@ public class ServerHandr extends ChannelInboundHandlerAdapter {
         // io.netty.buffer.ByteBuf 性能高于 java.nio.ByteBuffer
         ByteBuf byteBuf = (ByteBuf) msg;
         // 将 ByteBuf 缓冲区数据转为字符串, 打印出来
-        System.out.println(ctx.channel().remoteAddress() + " 发送数据 : " + byteBuf.toString(CharsetUtil.UTF_8));
+        System.out.println(ctx.channel().remoteAddress() + " 接收到客户端发送的数据 : " + byteBuf.toString(CharsetUtil.UTF_8));
     }
 
     /**
@@ -51,7 +50,6 @@ public class ServerHandr extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        super.channelReadComplete(ctx);
         // 数据编码 : 将字符串编码, 存储到 io.netty.buffer.ByteBuf 缓冲区中
         ByteBuf byteBuf = Unpooled.copiedBuffer("Hello Client", CharsetUtil.UTF_8);
 
@@ -67,7 +65,6 @@ public class ServerHandr extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
         System.out.println("通道异常, 关闭通道");
         //如果出现异常, 就关闭该通道
         ctx.close();

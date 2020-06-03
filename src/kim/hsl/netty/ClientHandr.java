@@ -23,17 +23,14 @@ public class ClientHandr extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        super.channelActive(ctx);
         // 查看 ChannelHandlerContext 中封装的内容
         System.out.println("ChannelHandlerContext ctx = " + ctx);
 
         // 数据编码 : 将字符串编码, 存储到 io.netty.buffer.ByteBuf 缓冲区中
-        //ByteBuf byteBuf = Unpooled.copiedBuffer("Hello Server", CharsetUtil.UTF_8);
+        ByteBuf byteBuf = Unpooled.copiedBuffer("Hello Server", CharsetUtil.UTF_8);
 
         // 写出并刷新操作 : 写出数据到通道的缓冲区 ( write ), 并执行刷新操作 ( flush )
-        ctx.writeAndFlush(
-                Unpooled.copiedBuffer("Hello Server", CharsetUtil.UTF_8)
-        );
+        ctx.writeAndFlush(byteBuf);
     }
 
     /**
@@ -48,7 +45,6 @@ public class ClientHandr extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        super.channelRead(ctx, msg);
         // 查看 ChannelHandlerContext 中封装的内容
         System.out.println("ChannelHandlerContext ctx = " + ctx);
 
@@ -69,7 +65,6 @@ public class ClientHandr extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
         System.out.println("通道异常, 关闭通道");
         //如果出现异常, 就关闭该通道
         ctx.close();
