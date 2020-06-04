@@ -5,8 +5,11 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.EventLoop;
 import io.netty.channel.ChannelPipeline;
 import io.netty.util.CharsetUtil;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Handler 处理者, 是 NioEventLoop 线程中处理业务逻辑的类
@@ -32,6 +35,22 @@ public class ServerHandr extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 查看 ChannelHandlerContext 中封装的内容
         System.out.println("channelRead : ChannelHandlerContext ctx = " + ctx);
+
+        // 从 ChannelHandlerContext ctx 中获取通道
+        Channel channel = ctx.channel();
+        // 获取通道对应的事件循环
+        EventLoop eventLoop = channel.eventLoop();
+        // 在 Runnable 中用户自定义耗时操作, 异步执行该操作, 该操作不能阻塞在此处执行
+        // schedule(Runnable command, long delay, TimeUnit unit)
+        // Runnable command 参数 : 异步任务
+        // long delay 参数 : 延迟执行时间
+        // TimeUnit unit参数 : 延迟时间单位, 秒, 毫秒, 分钟
+        eventLoop.schedule(new Runnable() {
+            @Override
+            public void run() {
+                //执行耗时操作
+            }
+        }, 100, TimeUnit.MILLISECONDS);
 
         // 将客户端上传的数据转为 ByteBuffer
         // 这里注意该类是 Netty 中的 io.netty.buffer.ByteBuf 类

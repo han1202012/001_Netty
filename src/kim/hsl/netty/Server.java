@@ -34,6 +34,7 @@ public class Server {
                         new ChannelInitializer<SocketChannel>() {// 创建通道初始化对象
                             @Override
                             protected void initChannel(SocketChannel ch) throws Exception {
+                                // 该方法在服务器与客户端连接建立成功后会回调
                                 // 为 管道 Pipeline 设置处理器 Hanedler
                                 ch.pipeline().addLast(new ServerHandr());
                             }
