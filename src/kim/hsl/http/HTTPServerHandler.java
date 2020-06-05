@@ -7,6 +7,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
+import java.net.URI;
+
 /**
  * HTTP 服务器处理类
  * SimpleChannelInboundHandler 是 ChannelInboundHandlerAdapter 子类
@@ -17,6 +19,20 @@ public class HTTPServerHandler extends SimpleChannelInboundHandler<HttpObject> {
     protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
         if(msg instanceof HttpRequest){ //判断该  HttpObject msg 参数是否是 Http 请求
             System.out.println(ctx.channel().remoteAddress() + " 客户端请求数据 ... ");
+
+            // 判定 HTTP 请求类型, 过滤 HTTP 请求
+
+            // 获取 HTTP 请求
+            HttpRequest httpRequest = (HttpRequest) msg;
+            // 获取网络资源 URI
+            URI uri = new URI(httpRequest.uri());
+            System.out.println("本次 HTTP 请求资源 " + uri.getPath());
+
+            // 判定 uri 中请求的资源, 如果请求的是网站图标, 那么直接屏蔽本次请求
+            if(uri != null && uri.getPath() != null && uri.getPath().contains("ico")){
+                System.out.println("请求图标资源 " + uri.getPath() +", 屏蔽本次请求 !");
+                return;
+            }
 
             // 准备给客户端浏览器发送的数据
             ByteBuf byteBuf = Unpooled.copiedBuffer("Hello Client", CharsetUtil.UTF_8);
