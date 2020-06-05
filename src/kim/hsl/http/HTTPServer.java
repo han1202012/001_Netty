@@ -1,20 +1,19 @@
-package kim.hsl.netty;
+package kim.hsl.http;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpServerCodec;
+import kim.hsl.netty.ServerHandler;
 
 /**
- * Netty 案例服务器端
+ * HTTP 服务器
+ * 客户端使用浏览器访问即可
  */
-public class Server {
+public class HTTPServer {
     public static void main(String[] args) {
-
         // 1. 创建 BossGroup 线程池 和 WorkerGroup 线程池, 其中维护 NioEventLoop 线程
         //     NioEventLoop 线程中执行无限循环操作
 
@@ -35,20 +34,29 @@ public class Server {
                             @Override
                             protected void initChannel(SocketChannel ch) throws Exception {
                                 // 该方法在服务器与客户端连接建立成功后会回调
-                                // 为 管道 Pipeline 设置处理器 Hanedler
-                                ch.pipeline().addLast(new ServerHandler());
+                                // 获取管道
+                                ChannelPipeline pipeline = ch.pipeline();
+
+                                // 为管道加入 HTTP 协议的编解码器 HttpServerCodec,
+                                // codec 中的 co 是 coder 编码器的意思, dec 是 decoder 解码器的意思
+                                // 第一个字符串是编解码器的名称
+                                pipeline.addLast("HttpServerCodec" , new HttpServerCodec());
+
+                                // 为管道 Pipeline 设置处理器 Hanedler
+                                pipeline.addLast("HTTPServerHandler", new HTTPServerHandler());
                             }
                         }
                 );
-        System.out.println("服务器准备完毕 ...");
+        System.out.println("HTTP 服务器准备完毕 ...");
 
-        ChannelFuture cf = null;
+
+        ChannelFuture channelFuture = null;
         try {
             // 绑定本地端口, 进行同步操作 , 并返回 ChannelFuture
-            cf = bootstrap.bind(8888).sync();
-            System.out.println("服务器开始监听 8888 端口 ...");
+            channelFuture = bootstrap.bind(8888).sync();
+            System.out.println("HTTP 服务器开始监听 8888 端口 ...");
             // 关闭通道 , 开始监听操作
-            cf.channel().closeFuture().sync();
+            channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
@@ -56,6 +64,5 @@ public class Server {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
-
     }
 }

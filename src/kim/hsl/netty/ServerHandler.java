@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  *
  * 规范 : 该 Handler 类中需要按照业务逻辑处理规范进行开发
  */
-public class ServerHandr extends ChannelInboundHandlerAdapter {
+public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     /**
      * 读取数据 : 在服务器端读取客户端发送的数据

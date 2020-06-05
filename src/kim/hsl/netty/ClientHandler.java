@@ -14,7 +14,7 @@ import io.netty.util.CharsetUtil;
  *
  * 规范 : 该 Handler 类中需要按照业务逻辑处理规范进行开发
  */
-public class ClientHandr extends ChannelInboundHandlerAdapter {
+public class ClientHandler extends ChannelInboundHandlerAdapter {
 
     /**
      * 通道就绪后触发该方法

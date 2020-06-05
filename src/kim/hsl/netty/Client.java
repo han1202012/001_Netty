@@ -22,7 +22,7 @@ public class Client {
                         new ChannelInitializer<SocketChannel>() {
                             @Override
                             protected void initChannel(SocketChannel ch) throws Exception {
-                                ch.pipeline().addLast(new ClientHandr());
+                                ch.pipeline().addLast(new ClientHandler());
                             }
                         }
                 );
