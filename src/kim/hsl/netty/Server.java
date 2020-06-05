@@ -1,10 +1,7 @@
 package kim.hsl.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -42,13 +39,38 @@ public class Server {
                 );
         System.out.println("服务器准备完毕 ...");
 
-        ChannelFuture cf = null;
+        ChannelFuture channelFuture = null;
         try {
             // 绑定本地端口, 进行同步操作 , 并返回 ChannelFuture
-            cf = bootstrap.bind(8888).sync();
+            channelFuture = bootstrap.bind(8888).sync();
             System.out.println("服务器开始监听 8888 端口 ...");
+
+            // 监听绑定操作的结果
+            // 添加 ChannelFutureListener 监听器, 监听 bind 操作的结果
+            channelFuture.addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture future) throws Exception {
+                    if(future.isDone()){
+                        System.out.println("绑定端口完成");
+                    }
+
+                    if(future.isSuccess()){
+                        System.out.println("绑定端口成功");
+                    }else{
+                        System.out.println("绑定端口失败");
+                    }
+
+                    if(future.isCancelled()){
+                        System.out.println("绑定端口取消");
+                    }
+
+                    System.out.println("失败原因 : " + future.cause());
+                }
+            });
+
+
             // 关闭通道 , 开始监听操作
-            cf.channel().closeFuture().sync();
+            channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
