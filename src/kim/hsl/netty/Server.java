@@ -27,6 +27,7 @@ public class Server {
                 .channel(NioServerSocketChannel.class)  // 设置 NIO 网络套接字通道类型
                 .option(ChannelOption.SO_BACKLOG, 128)  // 设置线程队列维护的连接个数
                 .childOption(ChannelOption.SO_KEEPALIVE, true)  // 设置连接状态行为, 保持连接状态
+                .handler(null)
                 .childHandler(  // 为 WorkerGroup 线程池对应的 NioEventLoop 设置对应的事件 处理器 Handler
                         new ChannelInitializer<SocketChannel>() {// 创建通道初始化对象
                             @Override
