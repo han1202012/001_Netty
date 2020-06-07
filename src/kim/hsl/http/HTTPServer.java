@@ -44,6 +44,9 @@ public class HTTPServer {
 
                                 // 为管道 Pipeline 设置处理器 Hanedler
                                 pipeline.addLast("HTTPServerHandler", new HTTPServerHandler());
+
+                                // 管道初始化完成
+                                System.out.println("管道初始化完成!");
                             }
                         }
                 );
@@ -55,8 +58,13 @@ public class HTTPServer {
             // 绑定本地端口, 进行同步操作 , 并返回 ChannelFuture
             channelFuture = bootstrap.bind(8888).sync();
             System.out.println("HTTP 服务器开始监听 8888 端口 ...");
+
+            //获取管道
+            ChannelPipeline channelPipeline = channelFuture.channel().pipeline();
+
             // 获取并关闭通道 , 开始监听操作
             channelFuture.channel().closeFuture().sync();
+            System.out.println("服务器准备完毕");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
